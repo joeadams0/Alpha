@@ -1,11 +1,11 @@
 #include<stdio.h>
-#include "../Engine/Include/World.hpp"
-#include "../Engine/Include/Scene.hpp"
-#include "../Engine/Include/Entity.hpp"
-#include "../Engine/Include/EntityManager.hpp"
-#include "../Engine/Include/SystemManager.hpp"
-#include "../Engine/Include/Component.hpp"
-#include "../Engine/Include/System.hpp"
+#include "../../Engine/Include/World.hpp"
+#include "../../Engine/Include/Scene.hpp"
+#include "../../Engine/Include/Entity.hpp"
+#include "../../Engine/Include/EntityManager.hpp"
+#include "../../Engine/Include/SystemManager.hpp"
+#include "../../Engine/Include/Component.hpp"
+#include "../../Engine/Include/System.hpp"
 
 using namespace Panther;
 
@@ -42,5 +42,4 @@ int main() {
   	world->process();
 	return 1;
 }
-
 

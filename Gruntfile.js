@@ -1,32 +1,62 @@
+var version = '0.0.0'
+
 
 var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
 
 module.exports = function (grunt) {
+	/**
+	 * Edit these build settings
+	 */
+
+	// Path to emscripten em++ file
+	var jsCompiler = 'em++',
+		// Clang compiler
+		clangCompiler = 'clang++',
+
+		// Add what you like
+		cmdLineArgs = [
+			'-O2',
+			'-Wno-c++11-extensions'
+		],	
+
+		args = cmdLineArgs.join(' '),
+
+		// Get engine files to compile
+		engineFiles = grunt.file.expand('Engine/**/*.cpp'),
+		engineFiles = engineFiles.join(' '),
+
+		// File to be written - will be written in gameDir/build with proper extension
+		outputFile = 'output',
+		outputDir = '',
+
+		// The game or example to compile
+		gameDir = grunt.option('gameDir')
+
+		gameFiles = '',
+		sourceFiles = '',
+		buildDir = 'build/';
+
+	if(gameDir){
+		gameFiles = grunt.file.expand(gameDir+'**/*.cpp');
+		gameFiles = gameFiles.join(' ');
+		outputDir = gameDir+buildDir;
+	}
+
+	grunt.file.mkdir(gameDir+buildDir);
+
+
+	sourceFiles = engineFiles + ' ' + gameFiles;
+
+
 	// Load
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-open');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-shell');
-
-	var jsCommand = 'em++',
-		exeCommand = 'clang++';
-
-
-	// Get files to compile
-	var cppFiles = grunt.file.expand('src/**/*.cpp');
-  	cppFiles = cppFiles.join(' ');
-
-  	var args = [
-  		'-O0',
-  		'-Wno-c++11-extensions'
-  	];
-
-  	var outfileJS = '-o app/js/build/panther-0.0.0.js',
-  		outfileEXE = '-o panther-0.0.0.out';
-  	args = args.join(' ');
+  	
 
 	// Init
 	grunt.initConfig({
@@ -36,24 +66,24 @@ module.exports = function (grunt) {
 				hostname : 'localhost',
 				keepalive : false
 			},
-			game : {
+			example : {
 				options : {
 					middleware : function(connect){
 						return [
-							mountFolder(connect, './app')
+							mountFolder(connect, gameDir)
 						];
 					}
 				}
 			}
 		},
 		open : {
-			server : {
-				path : 'http://localhost:<%= connect.options.port %>'
+			example : {
+				path : 'http://localhost:<%= connect.options.port %>/'+buildDir+outputFile+'.html'
 			}
 		},
 		clean : {
 			server : 'temp',
-			js : 'app/js/build/**/*'
+			example : gameDir+buildDir+'/**/*'
 		},
 		watch : {
 			livereload : {
@@ -67,10 +97,13 @@ module.exports = function (grunt) {
 		},
 		shell : {
 			compileJS : {
-				command : jsCommand+' '+cppFiles+' '+args+' '+outfileJS 
+				command : jsCompiler+' '+sourceFiles+' '+args+' -o '+outputDir+outputFile+'.js' 
+			},
+			compileHTML : {
+				command : jsCompiler+' '+sourceFiles+' '+args+' -o '+outputDir+outputFile+'.html' 
 			},
 			compileEXE : {
-				command : exeCommand+' '+cppFiles+' '+args+' -std=c++11 -stdlib=libc++  -I /usr/lib/c++/v1/ -L /usr/lib/c++/v1/ '+outfileEXE
+				command : clangCompiler+' '+sourceFiles+' '+args+' -std=c++11 -stdlib=libc++  -I /usr/lib/c++/v1/ -L /usr/lib/c++/v1/ -o '+outputDir+outputFile
 			}
 		}
 	});
@@ -83,8 +116,27 @@ module.exports = function (grunt) {
 		'watch:livereload'
 	]);
 
-	grunt.registerTask('build', [
-		'clean:js',
-		'shell:compileJS',
-	]);
+	grunt.registerTask('build', function(type){
+		if(type == 'js'){
+			grunt.task.run([
+				'clean:example',
+				'shell:compileJS'
+			]);
+		}
+		else if(type == 'exe'){
+			grunt.task.run([
+				'clean:example',
+				'shell:compileEXE'
+			]);
+		}
+		else{
+			grunt.task.run([
+				'clean:example',
+				'shell:compileHTML',
+				'connect:example',
+				'open:example',
+				'watch:livereload'
+			]);
+		}
+	});
 }
