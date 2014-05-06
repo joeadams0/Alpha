@@ -43,6 +43,8 @@ module.exports = function (grunt) {
 		gameFiles = gameFiles.join(' ');
 		outputDir = gameDir+buildDir;
 	}
+	else
+		gameDir = '';
 
 	grunt.file.mkdir(gameDir+buildDir);
 
