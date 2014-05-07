@@ -5,14 +5,31 @@
  *      Author: Joe Adams
  */
 
-#include "../Include/System.hpp"
+#include "System.hpp"
 
 using namespace Panther;
 
 System::System(){
-
+	_awake = false;
 }
 
 System::~System(){
 	
+}
+
+
+void System::process(){
+
+}
+
+void System::awake(){
+	_awake = true;
+}
+
+void System::sleep(){
+	_awake = false;
+}
+
+bool System::isAwake(){
+	return _awake;
 }

@@ -14,7 +14,7 @@
 #include "../Include/Scene.hpp"
 #include "../Include/ComponentManager.hpp"
 #include <list>
-#include <vector>
+#include <boost/dynamic_bitset.hpp>
 
 namespace Panther {
 	class Component;
@@ -30,7 +30,7 @@ namespace Panther {
 		void addComponent(Panther::Component* component);
 		void removeAllComponents();
 		std::list<Panther::Component*>* getComponents();
-		std::vector<bool>* getComposition();
+		boost::dynamic_bitset<>* getComposition();
 
 		bool matchesComposition(Panther::EntityComposition* composition);
 
@@ -48,7 +48,7 @@ namespace Panther {
 
 	protected:
 		Panther::uint entityId;
-		std::vector<bool>* composition;
+		boost::dynamic_bitset<>* composition;
 
 
 	};

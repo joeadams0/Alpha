@@ -5,15 +5,15 @@
  *      Author: Joe Adams
  */
 
-#include "../Include/EntityComposition.hpp"
-#include "../Include/Entity.hpp"
+#include "EntityComposition.hpp"
+#include "Entity.hpp"
 
 using namespace Panther;
 
 EntityComposition::EntityComposition(){
-	allSet = new std::vector<bool>();
-	someSet = new std::vector<bool>();
-	noneSet = new std::vector<bool>();
+	allSet = new boost::dynamic_bitset<>(16);
+	someSet = new boost::dynamic_bitset<>(16);
+	noneSet = new boost::dynamic_bitset<>(16);
 }
 
 EntityComposition::~EntityComposition(){
@@ -22,19 +22,19 @@ EntityComposition::~EntityComposition(){
 	delete noneSet;
 }
 
-std::vector<bool>* EntityComposition::getAllSet(){
+boost::dynamic_bitset<>* EntityComposition::getAllSet(){
 	return allSet;
 }
 
-std::vector<bool>* EntityComposition::getSomeSet(){
+boost::dynamic_bitset<>* EntityComposition::getSomeSet(){
 	return someSet;
 }
 
-std::vector<bool>* EntityComposition::getNoneSet(){
+boost::dynamic_bitset<>* EntityComposition::getNoneSet(){
 	return noneSet;
 }
 
-bool EntityComposition::matches(std::vector<bool>* composition){
+bool EntityComposition::matches(boost::dynamic_bitset<>* composition){
 	bool matches = true;
 
 	matches = matches || matchesAllSet(composition);
@@ -44,34 +44,22 @@ bool EntityComposition::matches(std::vector<bool>* composition){
 	return matches;
 }
 
-bool EntityComposition::matchesAllSet(std::vector<bool>* set){
-	for (int i = 0; i < set->size(); ++i)
-	{
-		if((!set->at(i) && allSet->at(i)) || (set->at(i) && !allSet->at(i)))
-			return false;
-	}
-	return true;
+bool EntityComposition::matchesAllSet(boost::dynamic_bitset<>* set){
+	boost::dynamic_bitset<> newSet = (*set) ^ (*allSet);
+
+	return newSet.none();
 }
 
-bool EntityComposition::matchesSomeSet(std::vector<bool>* set){
+bool EntityComposition::matchesSomeSet(boost::dynamic_bitset<>* set){
+	boost::dynamic_bitset<> newSet = (*set) & (*someSet);
 
-	for (int i = 0; i < set->size(); ++i)
-	{
-		if(set->at(i) && someSet->at(i))
-			return true;
-	}
-
-	return false;
+	return newSet.any(); 
 }
 
-bool EntityComposition::matchesNoneSet(std::vector<bool>* set){
+bool EntityComposition::matchesNoneSet(boost::dynamic_bitset<>* set){
+	boost::dynamic_bitset<> newSet = (*set) & (*noneSet);
 
-	for (int i = 0; i < set->size(); ++i)
-	{
-		if(set->at(i) && noneSet->at(i))
-			return false;
-	}
-	return true;
+	return newSet.none();
 }
 
 

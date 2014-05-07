@@ -5,14 +5,14 @@
  *      Author: Joe Adams
  */
 
-#include "../Include/Entity.hpp"
-#include "../Include/EntityComposition.hpp"
+#include "Entity.hpp"
+#include "EntityComposition.hpp"
 
 using namespace Panther;
 
 Entity::Entity(Panther::uint id){
 	entityId = id;
-	composition = new std::vector<bool>();
+	composition = new boost::dynamic_bitset<>(16);
 }
 
 Entity::~Entity(){
@@ -35,7 +35,7 @@ std::list<Component*>* Entity::getComponents(){
 	return getScene()->getComponentManager()->getComponents(this);
 }
 
-std::vector<bool>* Entity::getComposition() {
+boost::dynamic_bitset<>* Entity::getComposition() {
 	return composition;
 }
 

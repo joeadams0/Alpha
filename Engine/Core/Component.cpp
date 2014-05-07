@@ -5,8 +5,7 @@
  *      Author: Joe Adams
  */
 
-#include "../Include/Component.hpp"
-
+#include "Component.hpp"
 using namespace Panther;
 
 Component::Component(){

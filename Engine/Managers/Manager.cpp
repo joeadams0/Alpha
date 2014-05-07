@@ -5,7 +5,7 @@
  *      Author: Joe Adams
  */
 
-#include "../Include/Manager.hpp"
+#include "Manager.hpp"
 
 using namespace Panther;
 

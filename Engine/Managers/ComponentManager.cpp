@@ -5,11 +5,11 @@
  *      Author: Joe Adams
  */
 
-#include "../Include/ComponentManager.hpp"
-#include "../Include/Component.hpp"
-#include "../Include/Entity.hpp"
-#include "../Include/EntityComposition.hpp"
-#include "../Include/EntityManager.hpp"
+#include "ComponentManager.hpp"
+#include "Component.hpp"
+#include "Entity.hpp"
+#include "EntityComposition.hpp"
+#include "EntityManager.hpp"
 
 using namespace Panther;
 

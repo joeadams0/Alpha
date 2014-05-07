@@ -27,6 +27,9 @@ namespace Panther {
 		
 		void process();
 
+		void awake();
+		void sleep();
+		
 		void addSystem(Panther::System* system);
 
 		template<class T> T* removeSystem(){

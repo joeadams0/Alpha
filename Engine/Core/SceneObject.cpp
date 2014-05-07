@@ -5,7 +5,7 @@
  *      Author: Joe Adams
  */
 
-#include "../Include/SceneObject.hpp"
+#include "SceneObject.hpp"
 
 using namespace Panther;
 

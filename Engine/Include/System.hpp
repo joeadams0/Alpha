@@ -20,7 +20,14 @@ namespace Panther {
 		System();
 		~System();
 		
-		virtual void process(){};
+		virtual void process();
+
+		virtual void awake();
+		virtual void sleep();
+		bool isAwake();
+
+	protected:
+		bool _awake;
 	};
 }
 

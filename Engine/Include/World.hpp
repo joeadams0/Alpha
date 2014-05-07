@@ -19,8 +19,6 @@ namespace Panther {
 
 	class World : public Panther::Object {
 	public:
-		World();
-		~World();
 		
 		void addScene(Panther::Scene* scene);
 		Panther::Scene* getScene(std::string sceneName);
@@ -29,13 +27,30 @@ namespace Panther {
 		void transitionScene(std::string sceneName);
 
 		// Process the current scene for one frame
-		void process();
+		virtual void process();
+
+		virtual void start();
+		virtual void pause();
+
+		static Panther::World* getInstance();
+		static void processInstance();
+		static void setFps(int fps);
+
+
 
 	protected:
 		std::unordered_map<std::string, Panther::Scene*>* scenes;
 		Panther::Scene* currentScene;
 
+
+		World();
+		~World();
 		void setCurrentScene(Panther::Scene* scene);
+
+		static Panther::World* instance;
+		static bool created;
+		bool mainLoopSet;
+		static int fps;
 	};
 }
 

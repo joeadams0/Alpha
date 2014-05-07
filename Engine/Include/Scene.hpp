@@ -17,7 +17,7 @@
 #include <typeindex>
 #include <typeinfo>
 #include "Object.hpp"
-#include "EventManager.hpp"
+#include "MessageManager.hpp"
 #include "../Include/SystemManager.hpp"
 
 namespace Panther{
@@ -30,7 +30,7 @@ namespace Panther{
 	class EntityManager;
 	class ComponentManager;
 
-	class Scene : public Panther::Object, public Panther::EventManager {
+	class Scene : public Panther::Object, public Panther::MessageManager {
 	public:
 		Scene(std::string sceneName);
 		~Scene();

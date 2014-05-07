@@ -12,7 +12,7 @@
 
 #include "SceneObject.hpp"
 #include "ComponentManager.hpp"
-#include <vector>
+#include <boost/dynamic_bitset.hpp>
 
 namespace Panther {
 
@@ -24,36 +24,36 @@ namespace Panther {
 		EntityComposition();
 		~EntityComposition();
 
-		std::vector<bool>* getAllSet();
-		std::vector<bool>* getSomeSet();
-		std::vector<bool>* getNoneSet();
+		boost::dynamic_bitset<>* getAllSet();
+		boost::dynamic_bitset<>* getSomeSet();
+		boost::dynamic_bitset<>* getNoneSet();
 
-		bool matches(std::vector<bool>* composition);
+		bool matches(boost::dynamic_bitset<>* composition);
 
 		template<class T>
 		void all(){
-			(*allSet)[Panther::ComponentManager::getComponentBitByClass<T>()] = true;
+			(*allSet)[Panther::ComponentManager::getComponentBitByClass<T>()] = 1;
 		}
 
 		template<class T>
 		void some(){
-			(*someSet)[Panther::ComponentManager::getComponentBitByClass<T>()] = true;
+			(*someSet)[Panther::ComponentManager::getComponentBitByClass<T>()] = 1;
 		}
 
 		template<class T>
 		void none(){
-			(*someSet)[Panther::ComponentManager::getComponentBitByClass<T>()] = true;
+			(*someSet)[Panther::ComponentManager::getComponentBitByClass<T>()] = 1;
 		}
 
 	protected:
-		std::vector<bool>* allSet;
-		std::vector<bool>* someSet;
-		std::vector<bool>* noneSet; 
+		boost::dynamic_bitset<>* allSet;
+		boost::dynamic_bitset<>* someSet;
+		boost::dynamic_bitset<>* noneSet; 
 
 
-		bool matchesAllSet(std::vector<bool>* set);
-		bool matchesSomeSet(std::vector<bool>* set);
-		bool matchesNoneSet(std::vector<bool>* set);
+		bool matchesAllSet(boost::dynamic_bitset<>* set);
+		bool matchesSomeSet(boost::dynamic_bitset<>* set);
+		bool matchesNoneSet(boost::dynamic_bitset<>* set);
 
 	};
 }

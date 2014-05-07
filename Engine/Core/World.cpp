@@ -6,10 +6,16 @@
  */
 
 #include <string>
+#include <cstdarg>
 #include <unordered_map>
-#include "../Include/World.hpp"
+#include <emscripten.h>
+#include "World.hpp"
 
 using namespace Panther;
+
+bool World::created = false;
+World* World::instance = NULL;
+int World::fps = 0;
 
 World::World(){
 	scenes = new std::unordered_map<std::string, Scene*>();
@@ -76,5 +82,35 @@ void World::setCurrentScene(Scene* scene){
 void World::process(){
 	currentScene->process();
 }
+
+void World::start(){
+	if(mainLoopSet){
+		emscripten_resume_main_loop();
+		mainLoopSet = true;
+	}
+	else
+		emscripten_set_main_loop(World::processInstance, fps, 1);
+}
+
+void World::pause(){
+	emscripten_pause_main_loop();
+}
+
+World* World::getInstance(){
+	if(!created){
+		instance = new World();
+		created = true;
+	}
+	return instance;
+}
+
+void World::processInstance(){
+	getInstance()->process();
+}
+
+void World::setFps(int fps){
+	World::fps = fps;
+}
+
 
 

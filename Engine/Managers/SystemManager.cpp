@@ -5,8 +5,8 @@
  *      Author: Joe Adams
  */
 
-#include "../Include/SystemManager.hpp"
-#include "../Include/System.hpp"
+#include "SystemManager.hpp"
+#include "System.hpp"
 
 using namespace Panther;
 
@@ -26,5 +26,18 @@ void SystemManager::process(){
 
 void SystemManager::addSystem(System* system){
 	system->setScene(getScene());
+	system->awake();
 	(*systems)[system->getTypeIndex<System>(system)] = system;
+}
+
+void SystemManager::awake(){
+	for(auto it = systems->begin(); it != systems->end(); ++it ){
+		it->second->awake();
+	}	
+}
+
+void SystemManager::sleep(){
+	for(auto it = systems->begin(); it != systems->end(); ++it ){
+		it->second->sleep();
+	}
 }

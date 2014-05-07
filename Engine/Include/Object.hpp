@@ -27,7 +27,7 @@ namespace Panther {
 
 		template <class T> static std::type_index getTypeIndex(T* obj){
 			return std::type_index(typeid(*obj));
-		}
+		}	
 	private:
 		
 	};

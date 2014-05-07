@@ -5,8 +5,10 @@
  *      Author: Joe Adams
  */
 
-#include "../Include/EntityManager.hpp"
-#include "../Include/Entity.hpp"
+#include "EntityManager.hpp"
+#include "Entity.hpp"
+#include "Message.hpp"
+#include <iostream>
 
 using namespace Panther;
 
@@ -39,6 +41,10 @@ Entity* EntityManager::createEntity(){
 
 	setEntity(entity->getEntityId(), entity);
 
+	Message* message = new Message("engine_entity_created");
+	message->setProperty<uint>("entityId", entity->getEntityId());
+
+	getScene()->sendMessage(message);
 	return entity;
 }
 

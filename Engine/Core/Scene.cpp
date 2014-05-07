@@ -5,10 +5,10 @@
  *      Author: Joe Adams
  */
 
-#include "../Include/Scene.hpp"
-#include "../Include/EntityManager.hpp"
-#include "../Include/ComponentManager.hpp"
-#include "../Include/Manager.hpp"
+#include "Scene.hpp"
+#include "EntityManager.hpp"
+#include "ComponentManager.hpp"
+#include "Manager.hpp"
 
 using namespace Panther;
 

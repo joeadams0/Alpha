@@ -5,7 +5,7 @@
  *      Author: Joe Adams
  */
   
-#include "../Include/Object.hpp"
+#include "Object.hpp"
 
 using namespace Panther;
 
