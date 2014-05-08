@@ -10,6 +10,7 @@
 #include "Entity.hpp"
 #include "EntityComposition.hpp"
 #include "EntityManager.hpp"
+#include "Message.hpp"
 
 using namespace Panther;
 
@@ -25,9 +26,19 @@ ComponentManager::~ComponentManager(){
 }
 
 void ComponentManager::addComponent(Entity* entity, Component* component){
+	addComponent(entity, component, true);
+}
+
+void ComponentManager::addComponent(Entity* entity, Component* component, bool sendMessage){
 	component->setScene(getScene());
 	uint bit = getComponentBitByClass(component);
 	(*getComponentMap(bit))[entity] = component;
+
+	if(sendMessage){
+		Message* message = new Message(Message::ENTITY_COMPOSITION_CHANGED);
+		message->setProperty<Entity*>("entity", entity);
+		getScene()->sendMessage(message);
+	}
 }
 
 void ComponentManager::addComponents(Entity* entity, std::vector<Component*>* comps){
@@ -44,6 +55,9 @@ void ComponentManager::removeAllComponents(Entity* entity){
 
 		++it;
 	}
+	Message* message = new Message(Message::ENTITY_COMPOSITION_CHANGED);
+	message->setProperty<Entity*>("entity", entity);
+	getScene()->sendMessage(message);
 }
 
 std::list<Component*>* ComponentManager::getComponents(Entity* entity){

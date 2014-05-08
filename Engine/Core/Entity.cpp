@@ -7,6 +7,7 @@
 
 #include "Entity.hpp"
 #include "EntityComposition.hpp"
+#include "EntityManager.hpp"
 
 using namespace Panther;
 
@@ -41,4 +42,8 @@ boost::dynamic_bitset<>* Entity::getComposition() {
 
 bool Entity::matchesComposition(EntityComposition* composition){
 	return composition->matches(this->getComposition());
+}
+
+void Entity::destroy(){
+	getScene()->getEntityManager()->destroyEntity(this);
 }

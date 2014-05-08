@@ -10,6 +10,11 @@
 
 using namespace Panther;
 
+
+std::string Message::ENTITY_CREATED = "engine_entity_created";
+std::string Message::ENTITY_DESTROYED = "engine_entity_destroyed";
+std::string Message::ENTITY_COMPOSITION_CHANGED = "engine_entity_composition_changed";
+
 Message::Message(std::string messageName){
 	this->messageName = messageName;
 	messageType = getMessageType(messageName);

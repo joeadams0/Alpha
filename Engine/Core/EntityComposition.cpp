@@ -45,9 +45,9 @@ bool EntityComposition::matches(boost::dynamic_bitset<>* composition){
 }
 
 bool EntityComposition::matchesAllSet(boost::dynamic_bitset<>* set){
-	boost::dynamic_bitset<> newSet = (*set) ^ (*allSet);
+	boost::dynamic_bitset<> newSet = (*set) & (*allSet);
 
-	return newSet.none();
+	return newSet == (*allSet);
 }
 
 bool EntityComposition::matchesSomeSet(boost::dynamic_bitset<>* set){

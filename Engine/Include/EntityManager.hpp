@@ -29,8 +29,8 @@ namespace Panther
 		void process(){};
 
 		Entity* createEntity();
-		void destroyEntity(Entity* entity);
-		Entity* getEntity(Panther::uint id);
+		void destroyEntity(Panther::Entity* entity);
+		Entity* getEntityById(Panther::uint id);
 		Entity* getEntityByName(std::string entityName);
 		void setEntityName(Entity* entity, std::string entityName);
 		int getEntityCount();
@@ -47,6 +47,8 @@ namespace Panther
 
 		void setEntity(Panther::uint id, Entity* entity);
 		Panther::uint getIndex(uint id);
+		Entity* createEntity(bool sendMessage);
+		void destroyEntity(Panther::Entity* entity, bool sendMessage);
 
 	};
 	

@@ -45,6 +45,8 @@ namespace Panther{
 
 		Panther::Entity* getEntityByName(std::string name);
 
+		Panther::Entity* getEntityById(Panther::uint id);
+
 		void addSystem(Panther::System* system);
 
 		template<class T> T* removeSystem(){

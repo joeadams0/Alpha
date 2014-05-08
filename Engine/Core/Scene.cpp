@@ -67,6 +67,10 @@ Entity* Scene::getEntityByName(std::string name){
 	return getEntityManager()->getEntityByName(name);
 }
 
+Entity* Scene::getEntityById(uint id){
+	return getEntityManager()->getEntityById(id);
+}
+
 
 void Scene::addSystem(System* system){
 	getSystemManager()->addSystem(system);

@@ -34,6 +34,8 @@ namespace Panther {
 
 		bool matchesComposition(Panther::EntityComposition* composition);
 
+		void destroy();
+
 
 		template<class T> T* removeComponent(){
 			return getScene()->getComponentManager()->removeComponent<T>(this);

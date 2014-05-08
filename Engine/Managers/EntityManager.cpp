@@ -27,6 +27,10 @@ EntityManager::~EntityManager(){
 }
 
 Entity* EntityManager::createEntity(){
+	return createEntity(true);
+}
+
+Entity* EntityManager::createEntity(bool sendMessage){
 	Entity* entity;
 	if(entityPool->empty()){
 		entity = new Entity(nextEntityId);
@@ -40,20 +44,32 @@ Entity* EntityManager::createEntity(){
 	entity->setScene(getScene());
 
 	setEntity(entity->getEntityId(), entity);
-
-	Message* message = new Message("engine_entity_created");
-	message->setProperty<uint>("entityId", entity->getEntityId());
-
-	getScene()->sendMessage(message);
+	if(sendMessage){
+		Message* message = new Message(Message::ENTITY_CREATED);
+		message->setProperty<Entity*>("entity", entity);
+		getScene()->sendMessage(message);
+	}
+	
 	return entity;
 }
 
 void EntityManager::destroyEntity(Entity* entity){
+	destroyEntity(entity, true);
+}
+
+void EntityManager::destroyEntity(Entity* entity, bool sendMessage){
 	entityPool->push_front(entity);
+	
+	if(sendMessage){
+		Message* message = new Message(Message::ENTITY_DESTROYED);
+		message->setProperty<Entity*>("entity", entity);
+		getScene()->sendMessage(message);
+	}
+
 	setEntity(entity->getEntityId(), NULL);
 }
 
-Entity* EntityManager::getEntity(uint id){
+Entity* EntityManager::getEntityById(uint id){
 	return (*entities)[getIndex(id)];
 }
 

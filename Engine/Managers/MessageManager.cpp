@@ -8,6 +8,7 @@
 #include "MessageManager.hpp"
 #include "Message.hpp"
 #include "IMessageListener.hpp"
+#include "Message.hpp"
 
 using namespace Panther;
 

@@ -63,6 +63,7 @@ namespace Panther {
 
 		std::unordered_map<Panther::Entity*, Panther::Component*>* getComponentMap(Panther::uint index);
 		
+		void addComponent(Panther::Entity* entity, Panther::Component* component, bool sendMessage);		
 	};
 }
 

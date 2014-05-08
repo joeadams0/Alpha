@@ -22,7 +22,7 @@
 
 namespace Panther{
 
-	typedef boost::variant<bool, int, Panther::uint, std::string> MessageVar;
+	typedef boost::variant<bool, int, Panther::uint, std::string, Panther::Entity*, Panther::Component*> MessageVar;
 
 	class Message : public Panther::Object
 	{
@@ -30,7 +30,7 @@ namespace Panther{
 		Message(std::string messageName);
 		~Message();
 
-		template <class T> T getProperty(std::string name){
+		template <typename T> T getProperty(std::string name){
 			return boost::get<T>(properties[name]);
 		}
 
@@ -42,7 +42,14 @@ namespace Panther{
 		std::string getMessageName();
 		int getMessageType();
 
+
 		static int getMessageType(std::string messageName);
+
+		static std::string ENTITY_CREATED;
+		static std::string ENTITY_DESTROYED;
+		static std::string ENTITY_COMPOSITION_CHANGED;
+
+
 		
 	protected:
 		std::unordered_map<std::string, Panther::MessageVar> properties;
@@ -51,5 +58,7 @@ namespace Panther{
 	};
 
 }
+
+
 
 #endif
