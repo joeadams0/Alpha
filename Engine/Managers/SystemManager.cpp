@@ -27,7 +27,7 @@ void SystemManager::process(){
 void SystemManager::addSystem(System* system){
 	system->setScene(getScene());
 	system->awake();
-	(*systems)[system->getTypeIndex<System>(system)] = system;
+	(*systems)[system->getTypeIndex()] = system;
 }
 
 void SystemManager::awake(){

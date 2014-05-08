@@ -23,6 +23,8 @@ namespace Panther {
 
 		Panther::Entity* getEntity();
 
+		void setEntity(Entity* entity);
+
 	protected:
 		Panther::Entity* __entity;
 		

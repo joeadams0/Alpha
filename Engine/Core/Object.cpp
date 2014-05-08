@@ -17,15 +17,19 @@ bool operator==(Object& obj1, Object& obj2){
 	return obj1==obj2;
 }
 
-std::string JSONSerialize(){
+std::string Object::JSONSerialize(){
 	std::string json = "";
 
 	return json;
 }
 
-Object* JSONDeserialize(std::string json, Object* obj){
+Object* Object::JSONDeserialize(std::string json, Object* obj){
 	if(!obj)
 		obj = new Object();
 
 	return obj;
+}
+
+std::type_index Object::getTypeIndex(){
+	return std::type_index(typeid(*this));
 }

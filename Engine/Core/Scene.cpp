@@ -82,7 +82,7 @@ void Scene::addSystem(System* system){
 
 void Scene::addManager(Manager* manager){
 	manager->setScene(this);
-	(*managers)[manager->getTypeIndex<Manager>(manager)] = manager;
+	(*managers)[manager->getTypeIndex()] = manager;
 }
 
 

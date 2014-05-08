@@ -13,6 +13,7 @@
 #include "System.hpp"
 #include "IMessageListener.hpp"
 #include <vector>
+#include <set>
 
 namespace Panther{
 
@@ -28,14 +29,21 @@ namespace Panther{
 		virtual void awake();
 		virtual void handleMessage(Panther::Message* Message);
 
-		virtual int getEntityCount();
+		virtual void process();
+		virtual void processEntity(Entity* entity);
+
+		virtual std::set<Panther::Entity*> getEntities();
+
 
 	protected:
-		std::vector<Panther::Entity*> entities;
+		std::set<Panther::Entity*> entities;
 		Panther::EntityComposition* composition;
 
 		virtual void setEntityComposition(Panther::EntityComposition* composition);
 		virtual bool interestedInEntity(Panther::Entity* entity);
+
+		virtual void addEntity(Panther::Entity* entity);
+		virtual void removeEntity(Panther::Entity* entity);
 
 	
 	};

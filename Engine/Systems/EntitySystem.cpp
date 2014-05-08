@@ -27,26 +27,48 @@ void EntitySystem::awake(){
 	getScene()->addMessageListener(Message::ENTITY_COMPOSITION_CHANGED, this);
 }
 
+void EntitySystem::process(){
+	for (std::set<Entity*>::iterator it=entities.begin(); it!=entities.end(); ++it)
+    	processEntity(*it);
+}
+
+void EntitySystem::processEntity(Entity* entity){
+
+}
+
+std::set<Entity*> EntitySystem::getEntities(){
+	return entities;
+}
+
 void EntitySystem::handleMessage(Message* message){
 	int messageType = message->getMessageType();
 	Entity* ent = message->getProperty<Entity*>("entity");
 
 	if(messageType == Message::getMessageType(Message::ENTITY_CREATED)){
-		if(interestedInEntity(ent))
-			entities.push_back(ent);
+		if(interestedInEntity(ent)){
+			addEntity(ent);
+		}
 	}
 	else if(messageType == Message::getMessageType(Message::ENTITY_DESTROYED)){
-		entities.erase(std::remove(entities.begin(), entities.end(), ent));
+		removeEntity(ent);
 	}
 	else if(messageType == Message::getMessageType(Message::ENTITY_COMPOSITION_CHANGED)){
 		if(interestedInEntity(ent)){
-			entities.push_back(ent);
+			addEntity(ent);
 		}
 		else{
-			entities.erase(std::remove(entities.begin(), entities.end(), ent));
+			removeEntity(ent);
 		}
 
 	}
+}
+
+void EntitySystem::addEntity(Entity* entity){
+	entities.insert(entity);
+}
+
+void EntitySystem::removeEntity(Entity* entity){
+	entities.erase(entity);
 }
 
 bool EntitySystem::interestedInEntity(Entity* entity){
@@ -55,8 +77,4 @@ bool EntitySystem::interestedInEntity(Entity* entity){
 
 void EntitySystem::setEntityComposition(EntityComposition* comp){
 	composition = comp;
-}
-
-int EntitySystem::getEntityCount(){
-	return entities.size();
 }

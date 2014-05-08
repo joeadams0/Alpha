@@ -1,4 +1,4 @@
-var version = '0.0.0'
+var version = '0.0.0';
 
 
 var mountFolder = function (connect, dir) {
@@ -11,32 +11,33 @@ module.exports = function (grunt) {
 	 */
 
 	// Path to emscripten em++ file
-	var jsCompiler = 'em++',
-		// Clang compiler
-		clangCompiler = 'clang++',
+	var compiler = 'em++',
 
 		// Add what you like
 		cmdLineArgs = [
-			'-O2',
-			'-Wno-c++11-extensions'
+			'-O0',
+			'-Wno-c++11-extensions',
+			'-I Engine/Include'
 		],	
 
 		args = cmdLineArgs.join(' '),
 
 		// Get engine files to compile
-		engineFiles = grunt.file.expand('Engine/**/*.cpp'),
+		engineFiles = grunt.file.expand([
+			'Engine/**/*.cpp',
+			'!Engine/Include/boost/**/*.cpp'
+		]),
 		engineFiles = engineFiles.join(' '),
 
+		// The game or example to compile
+		gameDir = grunt.option('gameDir'),
+		buildDir = 'build/',
 		// File to be written - will be written in gameDir/build with proper extension
 		outputFile = 'output',
-		outputDir = '',
-
-		// The game or example to compile
-		gameDir = grunt.option('gameDir')
 
 		gameFiles = '',
 		sourceFiles = '',
-		buildDir = 'build/';
+		outputDir = '';
 
 	if(gameDir){
 		gameFiles = grunt.file.expand(gameDir+'**/*.cpp');
@@ -50,7 +51,6 @@ module.exports = function (grunt) {
 
 
 	sourceFiles = engineFiles + ' ' + gameFiles;
-
 
 	// Load
 	grunt.loadNpmTasks('grunt-contrib-connect');
@@ -99,14 +99,11 @@ module.exports = function (grunt) {
 		},
 		shell : {
 			compileJS : {
-				command : jsCompiler+' '+sourceFiles+' '+args+' -o '+outputDir+outputFile+'.js' 
+				command : compiler+' '+sourceFiles+' '+args+' -o '+outputDir+outputFile+'.js' 
 			},
 			compileHTML : {
-				command : jsCompiler+' '+sourceFiles+' '+args+' -o '+outputDir+outputFile+'.html' 
+				command : compiler+' '+sourceFiles+' '+args+' -o '+outputDir+outputFile+'.html' 
 			},
-			compileEXE : {
-				command : clangCompiler+' '+sourceFiles+' '+args+' -std=c++11 -stdlib=libc++  -I /usr/lib/c++/v1/ -L /usr/lib/c++/v1/ -o '+outputDir+outputFile
-			}
 		}
 	});
 
@@ -123,12 +120,6 @@ module.exports = function (grunt) {
 			grunt.task.run([
 				'clean:example',
 				'shell:compileJS'
-			]);
-		}
-		else if(type == 'exe'){
-			grunt.task.run([
-				'clean:example',
-				'shell:compileEXE'
 			]);
 		}
 		else{

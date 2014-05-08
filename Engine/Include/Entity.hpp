@@ -11,8 +11,8 @@
 #define ENTITY_HPP
 
 #include "SceneObject.hpp"
-#include "../Include/Scene.hpp"
-#include "../Include/ComponentManager.hpp"
+#include "Scene.hpp"
+#include "ComponentManager.hpp"
 #include <list>
 #include <boost/dynamic_bitset.hpp>
 

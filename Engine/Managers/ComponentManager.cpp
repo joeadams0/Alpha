@@ -11,6 +11,7 @@
 #include "EntityComposition.hpp"
 #include "EntityManager.hpp"
 #include "Message.hpp"
+#include <iostream>
 
 using namespace Panther;
 
@@ -19,10 +20,12 @@ uint ComponentManager::nextBit = 0;
 
 ComponentManager::ComponentManager(){
 	componentMaps = new std::vector<std::unordered_map<Entity*, Component*>*>();
+	flags = new boost::dynamic_bitset<>(5);
 }
 
 ComponentManager::~ComponentManager(){
 	delete componentMaps;
+	delete flags;
 }
 
 void ComponentManager::addComponent(Entity* entity, Component* component){
@@ -31,8 +34,12 @@ void ComponentManager::addComponent(Entity* entity, Component* component){
 
 void ComponentManager::addComponent(Entity* entity, Component* component, bool sendMessage){
 	component->setScene(getScene());
-	uint bit = getComponentBitByClass(component);
-	(*getComponentMap(bit))[entity] = component;
+	component->setEntity(entity);
+
+	uint bit = getComponentBitByClass(component);	
+	getComponentMap(bit)->insert(std::make_pair<Entity*, Component*>(entity, component));
+
+	setComponentBit(entity, bit, true);
 
 	if(sendMessage){
 		Message* message = new Message(Message::ENTITY_COMPOSITION_CHANGED);
@@ -44,15 +51,18 @@ void ComponentManager::addComponent(Entity* entity, Component* component, bool s
 void ComponentManager::addComponents(Entity* entity, std::vector<Component*>* comps){
 	std::vector<Component*>::iterator it = comps->begin();
 	for(; it != comps->end(); ++it){
-		addComponent(entity, (*it));
+		addComponent(entity, (*it), false);
 	}
+	Message* message = new Message(Message::ENTITY_COMPOSITION_CHANGED);
+	message->setProperty<Entity*>("entity", entity);
+	getScene()->sendMessage(message);
 }
 
 void ComponentManager::removeAllComponents(Entity* entity){
 	std::vector<std::unordered_map<Entity*, Component*>*>::iterator it = componentMaps->begin();
 	while(it != componentMaps->end()){
 		(*it)->erase(entity);
-
+		setComponentBit(entity, it-componentMaps->begin(),false);
 		++it;
 	}
 	Message* message = new Message(Message::ENTITY_COMPOSITION_CHANGED);
@@ -77,6 +87,10 @@ std::list<Component*>* ComponentManager::getComponents(Entity* entity){
 	return components;
 }
 
+void ComponentManager::setComponentBit(Entity* entity, uint bit, bool val){
+	(*(entity->getComposition()))[bit] = val;
+}
+
 std::list<Entity*>* ComponentManager::getEntities(EntityComposition* composition){
 	std::list<Entity*>* entities = new std::list<Entity*>();
 	std::vector<Entity*>* allEntities = getScene()->getEntityManager()->getAllEntities();
@@ -91,12 +105,12 @@ std::list<Entity*>* ComponentManager::getEntities(EntityComposition* composition
 }
 
 uint ComponentManager::getComponentBitByClass(Component* component){
-	return getComponentBitByClass(component->getTypeIndex<Component>(component));
+	return getComponentBitByClass(component->getTypeIndex());
 }
 
 uint ComponentManager::getComponentBitByClass(std::type_index type){
 	std::unordered_map<std::type_index, uint>::const_iterator got = compTypeToBitMap->find(type);
-	
+
 	if(got == compTypeToBitMap->end()){
 		return createComponentClassBit(type);
 	}
@@ -118,9 +132,10 @@ bool ComponentManager::hasComponent(Entity* entity, uint bit){
 }
 
 std::unordered_map<Entity*, Component*>* ComponentManager::getComponentMap(uint index){
-	if(componentMaps->size() <= index){
-		componentMaps->assign(index, new std::unordered_map<Entity*, Component*>()); 
+	if(!(*flags)[index]){
+		(*componentMaps)[index] = new std::unordered_map<Entity*, Component*>(); 
+		(*flags)[index] = true;
 	}
 
-	return componentMaps->at(index);
+	return (*componentMaps)[index];
 }

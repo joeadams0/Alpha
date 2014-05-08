@@ -17,10 +17,11 @@
 #include <string>
 #include <boost/variant.hpp>
 #include "Object.hpp"
-#include "Entity.hpp"
-#include "Component.hpp"
 
 namespace Panther{
+
+	class Entity;
+	class Component;
 
 	typedef boost::variant<bool, int, Panther::uint, std::string, Panther::Entity*, Panther::Component*> MessageVar;
 

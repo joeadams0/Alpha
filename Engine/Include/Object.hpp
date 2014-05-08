@@ -14,6 +14,7 @@
 #include <string>
 #include <typeindex>
 #include <typeinfo>
+#include <iostream>
 
 namespace Panther {
 	class Object
@@ -22,12 +23,11 @@ namespace Panther {
 		Object();
 		~Object();
 		
-		std::string JSONSerialize();
+		virtual std::string JSONSerialize();
 		static Object* JSONDeserialize(std::string json, Object* obj);
 
-		template <class T> static std::type_index getTypeIndex(T* obj){
-			return std::type_index(typeid(*obj));
-		}	
+		std::type_index getTypeIndex();
+		
 	private:
 		
 	};

@@ -22,8 +22,8 @@ namespace Panther {
 		SceneObject();
 		~SceneObject();
 
-		Panther::Scene* getScene();
-		void setScene(Panther::Scene* scene);
+		virtual Panther::Scene* getScene();
+		virtual void setScene(Panther::Scene* scene);
 
 	protected:
 		Panther::Scene* scene;

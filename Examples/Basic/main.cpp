@@ -1,45 +1,74 @@
 #include<stdio.h>
-#include "../../Engine/Include/World.hpp"
-#include "../../Engine/Include/Scene.hpp"
-#include "../../Engine/Include/Entity.hpp"
-#include "../../Engine/Include/EntityManager.hpp"
-#include "../../Engine/Include/SystemManager.hpp"
-#include "../../Engine/Include/Component.hpp"
-#include "../../Engine/Include/System.hpp"
+#include "World.hpp"
+#include "Scene.hpp"
+#include "Entity.hpp"
+#include "EntityManager.hpp"
+#include "SystemManager.hpp"
+#include "Component.hpp"
+#include "EntitySystem.hpp"
+#include "EntityComposition.hpp"
+#include <iostream>
+#include <string>
+#include "boost/variant.hpp"
 
 using namespace Panther;
 
-class system1 : public Panther::System
+
+class Comp : public Component{
+public:
+  Comp(){};
+  ~Comp(){};
+
+  void hello(){
+    std::cout << "hello from comp" << std::endl;
+  }
+};
+
+class system1 : public Panther::EntitySystem
 {
 public:
   system1(){};
   ~system1(){};
+
+  virtual void awake(){
+    EntitySystem::awake();
+
+    EntityComposition* comp = new EntityComposition();
+
+    comp->all<Comp>();
+
+    setEntityComposition(comp);
+  }
   
   void process(){
-    printf("hello from system");
+    Panther::EntitySystem::process();
+
+    Comp* component = new Comp();
+    Entity* ent = getScene()->createEntity();
+
+    ent->addComponent(component);
+
   }
 };
 
+
+
 int main() {
-  	Panther::World* world = new Panther::World();
-  	Panther::Scene* scene = new Panther::Scene("TestScene");
+
+    Panther::World::setFps(3);
+    Panther::World* world = Panther::World::getInstance();
+    Panther::Scene* scene = new Panther::Scene("TestScene");
 
   
-  	world->addScene(scene);
-  	
-  	Entity* entity0 = scene->getEntityManager()->createEntity();
-
-
-  	printf("Entity0: %i\n", entity0->getEntityId());
-  	Entity* entity = scene->createEntity();
-
-  	printf("Entity: %i\n", entity->getEntityId());
+    world->addScene(scene);
 
     system1* sys = new system1();
 
     scene->addSystem(sys);
 
-  	world->process();
-	return 1;
+
+    world->process();
+    world->start();
+  return 1;
 }
 

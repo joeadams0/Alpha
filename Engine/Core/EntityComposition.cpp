@@ -7,6 +7,7 @@
 
 #include "EntityComposition.hpp"
 #include "Entity.hpp"
+#include <iostream>
 
 using namespace Panther;
 
@@ -37,14 +38,15 @@ boost::dynamic_bitset<>* EntityComposition::getNoneSet(){
 bool EntityComposition::matches(boost::dynamic_bitset<>* composition){
 	bool matches = true;
 
-	matches = matches || matchesAllSet(composition);
-	matches = matches || matchesSomeSet(composition);
-	matches = matches || matchesNoneSet(composition);
+	matches = matches && matchesAllSet(composition);
+	matches = matches && matchesSomeSet(composition);
+	matches = matches && matchesNoneSet(composition);
 
 	return matches;
 }
 
 bool EntityComposition::matchesAllSet(boost::dynamic_bitset<>* set){
+
 	boost::dynamic_bitset<> newSet = (*set) & (*allSet);
 
 	return newSet == (*allSet);
@@ -53,7 +55,7 @@ bool EntityComposition::matchesAllSet(boost::dynamic_bitset<>* set){
 bool EntityComposition::matchesSomeSet(boost::dynamic_bitset<>* set){
 	boost::dynamic_bitset<> newSet = (*set) & (*someSet);
 
-	return newSet.any(); 
+	return newSet.any() || newSet == (*someSet); 
 }
 
 bool EntityComposition::matchesNoneSet(boost::dynamic_bitset<>* set){

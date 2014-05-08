@@ -19,3 +19,7 @@ Component::~Component(){
 Panther::Entity* Component::getEntity(){
 	return __entity;
 }
+
+void Component::setEntity(Entity* entity){
+	entity = entity;
+}

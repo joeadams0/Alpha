@@ -18,7 +18,7 @@
 #include <typeinfo>
 #include "Object.hpp"
 #include "MessageManager.hpp"
-#include "../Include/SystemManager.hpp"
+#include "SystemManager.hpp"
 
 namespace Panther{
 	class World;
@@ -26,9 +26,9 @@ namespace Panther{
 	class Component;
 	class EntityComposition;
 	class Manager;
-	class SystemManager;
-	class EntityManager;
 	class ComponentManager;
+	class EntityManager;
+	class System;
 
 	class Scene : public Panther::Object, public Panther::MessageManager {
 	public:
