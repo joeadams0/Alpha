@@ -10,6 +10,7 @@
 #ifndef COMMON_HPP_
 #define COMMON_HPP_
 
+
 namespace Panther{
 	typedef unsigned int uint;
 }

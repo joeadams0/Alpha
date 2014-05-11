@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include <stdio.h>
 #include "World.hpp"
 #include "Scene.hpp"
 #include "Entity.hpp"
@@ -66,9 +66,7 @@ int main() {
 
     scene->addSystem(sys);
 
-
-    world->process();
     world->start();
-  return 1;
+    return 1;
 }
 

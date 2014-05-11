@@ -15,11 +15,11 @@ using namespace Panther;
 
 bool World::created = false;
 World* World::instance = NULL;
-int World::fps = 0;
 
 World::World(){
 	scenes = new std::unordered_map<std::string, Scene*>();
 	currentScene = NULL;
+	World::instance = this;
 }
 
 World::~World(){
@@ -89,28 +89,15 @@ void World::start(){
 		mainLoopSet = true;
 	}
 	else
-		emscripten_set_main_loop(World::processInstance, fps, 1);
+		emscripten_set_main_loop(World::processInstance, 3, 1);
 }
 
 void World::pause(){
 	emscripten_pause_main_loop();
 }
 
-World* World::getInstance(){
-	if(!created){
-		instance = new World();
-		created = true;
-	}
-	return instance;
-}
-
 void World::processInstance(){
-	getInstance()->process();
+	instance->process();
 }
-
-void World::setFps(int fps){
-	World::fps = fps;
-}
-
 
 

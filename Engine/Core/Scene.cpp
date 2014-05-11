@@ -87,6 +87,7 @@ void Scene::addManager(Manager* manager){
 
 
 std::string Scene::getSceneName(){
+	std::cout << sceneName << std::endl;
 	return sceneName;
 }
 

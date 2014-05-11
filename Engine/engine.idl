@@ -1,0 +1,58 @@
+
+[Prefix="Panther::"]
+interface World {
+
+	World();
+	void addScene(Scene scene);
+	Scene getScene(DOMString sceneName);
+	Scene removeScene(DOMString sceneName);
+	Scene getCurrentScene();
+	void transitionScene(DOMString sceneName);
+
+	void process();
+	void start();
+	void pause();
+};
+
+
+[Prefix="Panther::"]
+interface Scene {
+	Scene(DOMString name);
+
+	Entity createEntity();
+	Entity getEntityByName(DOMString name);
+	Entity getEntityById(long id);
+
+	boolean isAwake();
+	boolean isInit();
+
+	EntityManager getEntityManager();
+	DOMString getSceneName();
+	World getWorld();
+
+};
+
+[Prefix="Panther::"]
+interface Entity {
+	
+	long getEntityId();
+	void addComponent(Component comp);
+	void removeAllComponents();
+
+	void destroy();
+
+
+};
+
+[Prefix="Panther::"]
+interface Component {
+	
+	Entity getEntity();
+
+};
+
+[Prefix="Panther::"]
+interface EntityManager {
+	
+
+};

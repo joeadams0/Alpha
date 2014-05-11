@@ -37,7 +37,7 @@ void ComponentManager::addComponent(Entity* entity, Component* component, bool s
 	component->setEntity(entity);
 
 	uint bit = getComponentBitByClass(component);	
-	getComponentMap(bit)->insert(std::make_pair<Entity*, Component*>(entity, component));
+	getComponentMap(bit)->insert(std::make_pair<Entity*,Component*>(entity,component));
 
 	setComponentBit(entity, bit, true);
 
